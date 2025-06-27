@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node build/bin/server.js",
-    "build": "node ace build && cp -r build/public/assets public/",
+    "build": "node ace build && cp -r build/public/assets public/ && node ace migration:run --seed",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
