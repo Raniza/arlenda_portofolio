@@ -6,7 +6,10 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./inertia/*"]
-    }
+    },
+    "resolveJsonModule": true,
+    // "esModuleInterop": true,
+    // "allowSyntheticDefaultImports": true
   },
   "exclude": ["./inertia/**/*", "node_modules", "build"]
 }

@@ -1,5 +1,5 @@
 // home.tsx
-import { Head } from '@inertiajs/react'
+import { Head, Link } from '@inertiajs/react'
 import { Headset, Mail } from 'lucide-react'
 import Layout from '~/components/layout'
 
@@ -9,7 +9,6 @@ export default function Home() {
       <Head title="Portofilo" />
 
       <Layout>
-        <div></div>
         {/* Hero / About Section */}
         <section
           id="about"
@@ -82,20 +81,23 @@ export default function Home() {
               </div>
 
               {/* Project Card 2 */}
+
               <div className="bg-white/50 text-gray-800 rounded-xl shadow-lg overflow-hidden transition transform hover:-translate-y-1 hover:shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1717386255773-1e3037c81788?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Project 2"
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4 space-y-2">
-                  <h3 className="text-xl font-semibold">Traceability System</h3>
-                  <p className="text-sm text-gray-900">
-                    Traceability system dalam dunia manufacture. Menampilkan data yang yang diambil
-                    dari mesin produksi. Data terintegrasi dangan vendor dan customer. Menggunakan
-                    Laravel React dengan adapter Inertia JS.
-                  </p>
-                </div>
+                <Link href="/trace">
+                  <img
+                    src="https://images.unsplash.com/photo-1717386255773-1e3037c81788?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="Project 2"
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-xl font-semibold">Traceability System</h3>
+                    <p className="text-sm text-gray-900">
+                      Traceability system dalam dunia manufacture. Menampilkan data yang yang
+                      diambil dari mesin produksi. Data terintegrasi dangan vendor dan customer.
+                      Menggunakan Laravel React dengan adapter Inertia JS.
+                    </p>
+                  </div>
+                </Link>
               </div>
 
               {/* Project Card 3 */}
@@ -142,7 +144,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6 text-gray-700">
             <div>
               <h3 className="text-xl font-semibold mb-2">Frontend</h3>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className="list-disc list-outside pl-5 space-y-1">
                 <li>React JS & Next.js</li>
                 <li>Tailwind CSS, Bootstrap</li>
                 <li>HTML5, CSS3, JavaScript (ES6+)</li>
@@ -152,7 +154,7 @@ export default function Home() {
 
             <div>
               <h3 className="text-xl font-semibold mb-2">Backend</h3>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className="list-disc list-outside pl-5 space-y-1">
                 <li>Laravel, AdonisJS</li>
                 <li>REST API, Authentication (JWT, Sanctum)</li>
                 <li>PostgreSQL, MySQL</li>
@@ -162,7 +164,7 @@ export default function Home() {
 
             <div>
               <h3 className="text-xl font-semibold mb-2">Dev Tools & Deployment</h3>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className="list-disc list-outside pl-5 space-y-1">
                 <li>Git, GitHub</li>
                 <li>Docker, Nginx</li>
               </ul>

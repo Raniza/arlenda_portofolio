@@ -26,9 +26,6 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
         <a href="#contact" onClick={onClose}>
           Contact
         </a>
-        <a href="/resume.pdf" onClick={onClose}>
-          Resume
-        </a>
       </nav>
     </div>
   )
