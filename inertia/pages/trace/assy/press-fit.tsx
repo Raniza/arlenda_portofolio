@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBox from '~/components/app/search-box'
 import TraceLayout from '~/components/trace-layout'
 import { formatDateOnly } from '~/lib/utils'
@@ -8,8 +8,8 @@ import { formatDateOnly } from '~/lib/utils'
 export type PressType = {
   serial_number: string
   model: string
-  start_datetime: number
-  upd_datetime: number
+  start_datetime: string
+  upd_datetime: string
   bush_loadstroke: number
   oil_seal_stroke: number
   judgment: number
@@ -18,6 +18,8 @@ export type PressType = {
 export default function PressFit({ press }: { press: PressType[] }) {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
+
+  const [isClient, setIsclient] = useState<boolean>(false)
 
   const [serialNumber, setSerialNumber] = useState<string>('')
 
@@ -52,6 +54,10 @@ export default function PressFit({ press }: { press: PressType[] }) {
     'Oil Seal Stroke',
     'Judge',
   ]
+
+  useEffect(() => {
+    setIsclient(true)
+  }, [])
 
   return (
     <>
@@ -103,14 +109,18 @@ export default function PressFit({ press }: { press: PressType[] }) {
                         <td className={`${classes}`}>{pf.serial_number}</td>
                         <td className={`${classes}`}>{pf.model}</td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(pf.start_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(pf.start_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(pf.upd_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(pf.upd_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>{pf.bush_loadstroke}</td>
                         <td className={`${classes}`}>{pf.oil_seal_stroke}</td>

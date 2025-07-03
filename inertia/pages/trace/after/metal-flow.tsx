@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBox from '~/components/app/search-box'
 import TraceLayout from '~/components/trace-layout'
 import { formatDateOnly } from '~/lib/utils'
@@ -8,8 +8,8 @@ import { formatDateOnly } from '~/lib/utils'
 export type MetalFlowType = {
   serial_number: string
   model: string
-  start_datetime: number
-  upd_datetime: number
+  start_datetime: string
+  upd_datetime: string
   peak_pressure: number
   peak_pressure_load_cell: number
   judgment: number
@@ -19,6 +19,8 @@ export default function MetalFlow({ metal_flow }: { metal_flow: MetalFlowType[] 
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
   //   console.log(metal_flow)
+
+  const [isClient, setIsclient] = useState<boolean>(false)
 
   const [serialNumber, setSerialNumber] = useState<string>('')
 
@@ -53,6 +55,10 @@ export default function MetalFlow({ metal_flow }: { metal_flow: MetalFlowType[] 
     'Peak Pressure Act.',
     'Judge',
   ]
+
+  useEffect(() => {
+    setIsclient(true)
+  }, [])
 
   return (
     <>
@@ -104,14 +110,18 @@ export default function MetalFlow({ metal_flow }: { metal_flow: MetalFlowType[] 
                         <td className={`${classes}`}>{mf.serial_number}</td>
                         <td className={`${classes}`}>{mf.model}</td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(mf.start_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(mf.start_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(mf.upd_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(mf.upd_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>{mf.peak_pressure}</td>
                         <td className={`${classes}`}>{mf.peak_pressure_load_cell}</td>

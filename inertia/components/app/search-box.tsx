@@ -39,7 +39,7 @@ export default function SearchBox({
     setSerialNumber('')
     setStartDate(undefined)
     setEndDate(undefined)
-    console.log(parentUrl)
+    // console.log(parentUrl)
 
     router.get(parentUrl)
   }
@@ -105,6 +105,7 @@ export default function SearchBox({
                       mode="single"
                       selected={startDate}
                       onSelect={setStartDate}
+                      month={new Date(2025, 5, 1)}
                       fromMonth={new Date(2025, 3, 11)}
                       toMonth={new Date(2025, 5, 10)}
                       disabled={(date) =>
@@ -137,6 +138,7 @@ export default function SearchBox({
                       mode="single"
                       selected={endDate}
                       onSelect={setEndDate}
+                      month={new Date(2025, 5, 1)}
                       fromMonth={new Date(2025, 3, 11)}
                       toMonth={new Date(2025, 5, 10)}
                       disabled={(date) =>

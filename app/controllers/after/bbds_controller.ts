@@ -18,8 +18,9 @@ export default class BbdsController {
     } else {
       const startDate = DateTime.fromFormat(params.start_date, 'yyyy-MM-dd')
         .startOf('day')
-        .toMillis()
-      const endDate = DateTime.fromFormat(params.end_date, 'yyyy-MM-dd').endOf('day').toMillis()
+        .toJSDate()
+
+      const endDate = DateTime.fromFormat(params.end_date, 'yyyy-MM-dd').endOf('day').toJSDate()
 
       bbd = await db.from('bbd_measurements').whereBetween('start_datetime', [startDate, endDate])
     }

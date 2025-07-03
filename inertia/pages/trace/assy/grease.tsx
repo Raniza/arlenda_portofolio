@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBox from '~/components/app/search-box'
 import TraceLayout from '~/components/trace-layout'
 import { formatDateOnly } from '~/lib/utils'
@@ -8,8 +8,8 @@ import { formatDateOnly } from '~/lib/utils'
 export type GreaseType = {
   serial_number: string
   model: string
-  start_datetime: number
-  upd_datetime: number
+  start_datetime: string
+  upd_datetime: string
   grease_weight: number
   grease_weight_total: number
   judgment: number
@@ -18,6 +18,8 @@ export type GreaseType = {
 export default function Grease({ greases }: { greases: GreaseType[] }) {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
+
+  const [isClient, setIsclient] = useState<boolean>(false)
 
   const [serialNumber, setSerialNumber] = useState<string>('')
 
@@ -52,6 +54,10 @@ export default function Grease({ greases }: { greases: GreaseType[] }) {
     'Grease Weight Total',
     'Judge',
   ]
+
+  useEffect(() => {
+    setIsclient(true)
+  }, [])
 
   return (
     <>
@@ -103,14 +109,18 @@ export default function Grease({ greases }: { greases: GreaseType[] }) {
                         <td className={`${classes}`}>{grease.serial_number}</td>
                         <td className={`${classes}`}>{grease.model}</td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(grease.start_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(grease.start_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(grease.upd_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(grease.upd_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>{grease.grease_weight}</td>
                         <td className={`${classes}`}>{grease.grease_weight_total}</td>

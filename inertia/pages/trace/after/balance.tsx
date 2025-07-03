@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBox from '~/components/app/search-box'
 import TraceLayout from '~/components/trace-layout'
 import { formatDateOnly } from '~/lib/utils'
@@ -8,8 +8,8 @@ import { formatDateOnly } from '~/lib/utils'
 export type BalanceType = {
   serial_number: string
   model: string
-  start_datetime: number
-  upd_datetime: number
+  start_datetime: string
+  upd_datetime: string
   measurements_1: number
   measurements_2: number
   degree_1: number
@@ -20,6 +20,8 @@ export type BalanceType = {
 export default function Lathe({ balances }: { balances: BalanceType[] }) {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
+
+  const [isClient, setIsclient] = useState<boolean>(false)
 
   const [serialNumber, setSerialNumber] = useState<string>('')
 
@@ -56,6 +58,10 @@ export default function Lathe({ balances }: { balances: BalanceType[] }) {
     'Degree 2',
     'Judge',
   ]
+
+  useEffect(() => {
+    setIsclient(true)
+  }, [])
 
   return (
     <>
@@ -107,14 +113,18 @@ export default function Lathe({ balances }: { balances: BalanceType[] }) {
                         <td className={`${classes}`}>{bal.serial_number}</td>
                         <td className={`${classes}`}>{bal.model}</td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(bal.start_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(bal.start_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(bal.upd_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(bal.upd_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>{bal.measurements_1}</td>
                         <td className={`${classes}`}>{bal.degree_1}</td>

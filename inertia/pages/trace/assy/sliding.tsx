@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBox from '~/components/app/search-box'
 import TraceLayout from '~/components/trace-layout'
 import { formatDateOnly } from '~/lib/utils'
@@ -8,8 +8,8 @@ import { formatDateOnly } from '~/lib/utils'
 export type SlidingType = {
   serial_number: string
   model: string
-  start_datetime: number
-  upd_datetime: number
+  start_datetime: string
+  upd_datetime: string
   sliding_resistance: number
   judgment: number
 }
@@ -17,6 +17,8 @@ export type SlidingType = {
 export default function Sliding({ slidings }: { slidings: SlidingType[] }) {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
+
+  const [isClient, setIsclient] = useState<boolean>(false)
 
   const [serialNumber, setSerialNumber] = useState<string>('')
 
@@ -42,6 +44,10 @@ export default function Sliding({ slidings }: { slidings: SlidingType[] }) {
   }
 
   const TABLE_HEAD = ['#', 'Serial No', 'Model', 'Start', 'End', 'Sliding Resistance', 'Judge']
+
+  useEffect(() => {
+    setIsclient(true)
+  }, [])
 
   return (
     <>
@@ -93,14 +99,18 @@ export default function Sliding({ slidings }: { slidings: SlidingType[] }) {
                         <td className={`${classes}`}>{sliding.serial_number}</td>
                         <td className={`${classes}`}>{sliding.model}</td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(sliding.start_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(sliding.start_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(sliding.upd_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(sliding.upd_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>{sliding.sliding_resistance}</td>
                         <td

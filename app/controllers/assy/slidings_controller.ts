@@ -18,8 +18,9 @@ export default class SlidingsController {
     } else {
       const startDate = DateTime.fromFormat(params.start_date, 'yyyy-MM-dd')
         .startOf('day')
-        .toMillis()
-      const endDate = DateTime.fromFormat(params.end_date, 'yyyy-MM-dd').endOf('day').toMillis()
+        .toJSDate()
+
+      const endDate = DateTime.fromFormat(params.end_date, 'yyyy-MM-dd').endOf('day').toJSDate()
 
       slidings = await db.from('slidings').whereBetween('start_datetime', [startDate, endDate])
     }

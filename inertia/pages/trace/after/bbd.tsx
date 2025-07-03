@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBox from '~/components/app/search-box'
 import TraceLayout from '~/components/trace-layout'
 import { formatDateOnly } from '~/lib/utils'
@@ -8,8 +8,8 @@ import { formatDateOnly } from '~/lib/utils'
 export type BbdType = {
   serial_number: string
   model: string
-  start_datetime: number
-  upd_datetime: number
+  start_datetime: string
+  upd_datetime: string
   bbd_measure_x1: number
   bbd_measure_y1: number
   bbd_measure_x5: number
@@ -20,6 +20,8 @@ export type BbdType = {
 export default function Bbd({ bbd }: { bbd: BbdType[] }) {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
+
+  const [isClient, setIsclient] = useState<boolean>(false)
 
   const [serialNumber, setSerialNumber] = useState<string>('')
 
@@ -56,6 +58,10 @@ export default function Bbd({ bbd }: { bbd: BbdType[] }) {
     'BBD Measure Y5',
     'Judge',
   ]
+
+  useEffect(() => {
+    setIsclient(true)
+  }, [])
 
   return (
     <>
@@ -107,14 +113,18 @@ export default function Bbd({ bbd }: { bbd: BbdType[] }) {
                         <td className={`${classes}`}>{meas.serial_number}</td>
                         <td className={`${classes}`}>{meas.model}</td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(meas.start_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(meas.start_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(meas.upd_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(meas.upd_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>{meas.bbd_measure_x1}</td>
                         <td className={`${classes}`}>{meas.bbd_measure_y1}</td>

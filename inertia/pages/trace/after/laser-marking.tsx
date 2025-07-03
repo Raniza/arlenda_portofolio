@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBox from '~/components/app/search-box'
 import TraceLayout from '~/components/trace-layout'
 import { formatDateOnly } from '~/lib/utils'
@@ -8,14 +8,16 @@ import { formatDateOnly } from '~/lib/utils'
 export type LaserItemType = {
   serial_number: string
   model: string
-  start_datetime: number
-  upd_datetime: number
+  start_datetime: string
+  upd_datetime: string
   judgment: number
 }
 
 export default function LaserMarking(props: { lasers: LaserItemType[] }) {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
+
+  const [isClient, setIsclient] = useState<boolean>(false)
 
   const [serialNumber, setSerialNumber] = useState<string>('')
 
@@ -33,6 +35,8 @@ export default function LaserMarking(props: { lasers: LaserItemType[] }) {
         start_date: formatDateOnly(startDate),
         end_date: formatDateOnly(endDate),
       }
+
+      // console.log(searchParams)
     }
 
     router.get('/trace/mach-after/search/laser-marking', searchParams, {
@@ -41,6 +45,10 @@ export default function LaserMarking(props: { lasers: LaserItemType[] }) {
   }
 
   const TABLE_HEAD = ['#', 'Serial No', 'Model', 'Start', 'End', 'Judge']
+
+  useEffect(() => {
+    setIsclient(true)
+  }, [])
 
   return (
     <>
@@ -90,14 +98,18 @@ export default function LaserMarking(props: { lasers: LaserItemType[] }) {
                         <td className={`${classes}`}>{laser.serial_number}</td>
                         <td className={`${classes}`}>{laser.model}</td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(laser.start_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(laser.start_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td className={`${classes}`}>
-                          {DateTime.fromMillis(laser.upd_datetime)
-                            .toUTC()
-                            .toFormat('yyyy-MM-dd HH:mm:ss')}
+                          {isClient
+                            ? DateTime.fromISO(laser.upd_datetime)
+                                .toUTC()
+                                .toFormat('yyyy-MM-dd HH:mm:ss')
+                            : ''}
                         </td>
                         <td
                           className={`${classes} ${laser.judgment === 1 ? 'text-green-600' : 'text-red-500'} font-semibold`}
